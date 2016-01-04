@@ -1,118 +1,142 @@
 import random
 
-def should_decrease_health(player_data):
-	if player_data[6] < 2:
+# VARIABLES
+GAME_OVER = False
+PLAYER_HEALTH = 5
+PLAYER_FOOD_POUNDS = 500
+MILES_TO_GO = 2000
+DAYS_PASSED = 0
+CURRENT_DAY = 1
+CURRENT_MONTH = 3
+MONTHS_31_DAYS = [3, 5, 7, 8, 10, 12]
+HEALTH_DECREASES_THIS_MONTH = 0
+
+
+def should_decrease_health():
+	global HEALTH_DECREASES_THIS_MONTH
+	if HEALTH_DECREASES_THIS_MONTH < 2:
 		random_day = random.randint(0, 30)
 		if random_day < 2:
 			return True
 	return False
 
 # updates the day
-def add_day(player_data):
-	MONTHS_31_DAYS = [3, 5, 7, 8, 10, 12]
-	if should_decrease_health(player_data):
-		player_data[1] -= 1
-	if player_data[4] < 31:
-		player_data[4] += 1
-	elif player_data[4] == 30 and player_data[5] in MONTHS_31_DAYS:
-		player_data[4] += 1
+def add_day():
+	global PLAYER_FOOD_POUNDS 
+	global CURRENT_DAY 
+	global CURRENT_MONTH 
+	global MONTHS_31_DAYS 
+	global PLAYER_HEALTH
+	global DAYS_PASSED
+	
+	if should_decrease_health():
+		PLAYER_HEALTH -= 1
+	if is_game_over():
+		return
+	if CURRENT_DAY < 31:
+		CURRENT_DAY += 1
+	elif CURRENT_DAY == 30 and CURRENT_MONTH in MONTHS_31_DAYS:
+		CURRENT_DAY += 1
 	else:
-		player_data[5] += 1
-		player_data[4] = 1
-	player_data[4] += 1
-	player_data[2] -= 5
+		CURRENT_MONTH += 1
+		CURRENT_DAY = 1
+	DAYS_PASSED += 1
+	PLAYER_FOOD_POUNDS -= 5
 
 # PROVIDE THIS TO STUDENTS
-def update_days(low_range, high_range, player_data):
+def update_days(low_range, high_range):
 	days = random.randint(low_range, high_range)
 	for i in range(0, days):
-		add_day(player_data)
+		add_day()
 
 # moves the player 30-60 miles and takes 3-7 days
-def travel(player_data):
+def travel():
+	global MILES_TO_GO
 	miles_traveled = random.randint(30, 61)
-	player_data[3] -= miles_traveled
-	update_days(3, 7, player_data)
+	MILES_TO_GO -= miles_traveled
+	update_days(3, 7)
 
 # increase health 1 level and takes 2-5 days
-def rest(player_data):
-	if player_data[1] < 5:
-		player_data[1] += 1
-	update_days(2, 5, player_data)
+def rest():
+	global PLAYER_HEALTH
+	if PLAYER_HEALTH < 5:
+		PLAYER_HEALTH += 1
+	update_days(2, 5)
 
 # adds 100lbs of food and takes 2-5 days
-def hunt(player_data):
-	player_data[2] += 100
-	update_days(2, 5, player_data)
+def hunt():
+	global PLAYER_FOOD_POUNDS
+	PLAYER_FOOD_POUNDS += 100
+	update_days(2, 5)
 
 # displays status
-def display_status(player_data):
-	print("Current Health: " + str(player_data[1]))
-	print("Food: " +  str(player_data[2]) + "lbs")
-	print("Distance Traveled: " + str(2000-player_data[3]) + "miles")
-	print("Day is (Month/Day): " + str(player_data[5]) + "/" + str(player_data[4]))
+def display_status():
+	global PLAYER_HEALTH 
+	global PLAYER_FOOD_POUNDS 
+	global MILES_TO_GO 
+	global CURRENT_DAY 
+	global CURRENT_MONTH 
+
+	print("Current Health: " + str(PLAYER_HEALTH))
+	print("Food: " + str(PLAYER_FOOD_POUNDS) + "lbs")
+	print("Distance Traveled: " + str(2000-MILES_TO_GO) + "miles")
+	print("Day is: " + str(CURRENT_MONTH) + "/" + str(CURRENT_DAY))
 
 # displays commands
 def display_help():
 	print("Commands are travel, rest, hunt, status, help, and quit")
 
 # ends game before next turn
-def quit_game(player_data):
-	player_data[0] = True
+def quit_game():
+	global GAME_OVER
+	GAME_OVER = True
 
 # check if the game is over
-def is_game_over(player_data):
-	if player_data[0]:
+def is_game_over():
+	global GAME_OVER 
+	global PLAYER_HEALTH 
+	global PLAYER_FOOD_POUNDS 
+	global MILES_TO_GO 
+	global CURRENT_DAY 
+	global CURRENT_MONTH 
+
+	if GAME_OVER:
 		return True
-	if (player_data[4] == 31 and player_data[5] == 12) or player_data[5] > 12:
+	if CURRENT_DAY == 31 and CURRENT_MONTH == 12:
 		print("It is Dec. 31st and you are not in Oregon.")
-		player_data[0] = True
 		return True
-	if player_data[1] < 1:
+	if PLAYER_HEALTH < 1:
 		print("You're health detiorated, and you died :(")
-		player_data[0] = True
 		return True
-	if player_data[2] < 1:
+	if PLAYER_FOOD_POUNDS < 1:
 		print("You ran out of food and starved")
-		player_data[0] = True
 		return True
-	if player_data[3] < 1:
+	if MILES_TO_GO < 1:
 		print("You MADE IT")
-		player_data[0] = True
 		return True
 	return False
 
 # parse and act upon input
-def process_user_input(user_input, player_data):
+def process_user_input(user_input):
 	if user_input == "travel":
-		travel(player_data)
+		travel()
 	elif user_input == "rest":
-		rest(player_data)
+		rest()
 	elif user_input == "hunt":
-		hunt(player_data)
+		hunt()
 	elif user_input == "status":
-		display_status(player_data)
+		display_status()
 	elif user_input == "help":
 		display_help()
 	elif user_input == "quit":
-		quit_game(player_data)
+		quit_game()
 	else:
 		print("Not Correct Input.")
 
 def game_loop():
-	GAME_OVER = False
-	PLAYER_HEALTH = 5
-	PLAYER_FOOD_POUNDS = 500
-	MILES_TO_GO = 2000
-	CURRENT_DAY = 1
-	CURRENT_MONTH = 3
-	HEALTH_DECREASES_THIS_MONTH = 0
-
-	player_data = [GAME_OVER, PLAYER_HEALTH, PLAYER_FOOD_POUNDS, MILES_TO_GO, CURRENT_DAY, CURRENT_MONTH, HEALTH_DECREASES_THIS_MONTH]
-
-	while not is_game_over(player_data):
+	while not is_game_over():
 		user_input = input("What is your choice? ")
-		process_user_input(user_input, player_data)
+		process_user_input(user_input)
 
 
 if __name__ == "__main__":

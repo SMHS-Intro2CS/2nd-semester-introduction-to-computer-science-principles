@@ -19,7 +19,7 @@ get_away = user_name + " decided to " + action + " " + action_description + " in
 finale = "Thrown off from " + destination + " " + user_name + " decides to go to " + new_location + "instead."
 summation = "What a " + final_description + " day in New York."
 
-print(introduction + background + distraction + get_away + finale + summation)
+print(introduction + background + distraction_part + get_away + finale + summation)
 
 
 

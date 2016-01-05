@@ -16,23 +16,66 @@ def check_side(board, side):
     won = won or check_direction(0, len(board)-1, 1, -1, board, side)
     return won
 
-def tic_tac_toe_checker(board):
+def tic_tac_toe_checker(board, x_name, y_name):
     right_side_won = check_side(board, 'x')
     if right_side_won:
-        print("Xs won")
+        print(x_name +  " won")
+        return True
     else:
         left_side_won = check_side(board, "o")
         if left_side_won:
-            print("Os won")
+            print(y_name + " won")
+            return True
         else:
-            print("No one won :(")
+            return False
 
-b1 = [['x', 'o', 'x'], ['x', 'o', 'o'], ['x', 'x', 'o']]
-b2 = [['o', 'o', 'x'], ['o', 'o', 'o'], ['x', 'x', 'o']]
-b3 = [['o', 'o', 'x'], ['o', 'x', 'o'], ['x', '0', 'x']]
-b4 = [['o', 'x', 'x'], ['x', 'o', 'o'], ['x', 'o', 'x']]
+def make_move(board, player, x, y): 
+    if y > len(board)-1  or x > len(board[y]) -1 : 
+        print("Cannot go there. Not on board")
+        return False
+    elif board[y][x] != ' ': 
+        print("That spot is not open")
+        return False
+    elif player == 'x': 
+        board[y][x] = 'x'
+        return True
+    else: 
+        board[y][x] = 'o'
+        return True
 
-tic_tac_toe_checker(b1)
-tic_tac_toe_checker(b2)
-tic_tac_toe_checker(b3)
-tic_tac_toe_checker(b4)
+def print_board(board): 
+    for column_index in range(0, len(board)): 
+        row = " "
+        for row_index in range(0, len(board[column_index])): 
+            if row_index != len(board[column_index]) -1 : 
+                row += board[column_index][row_index] + " |"
+            else: 
+                row += board[column_index][row_index]
+        print(row)
+        if column_index !=len(board) -1: 
+            print("----------")
+
+def game_loop(): 
+    print("Welcome to tic-tac-toe. x's go first")
+    x_name = input("What is your name x?")
+    y_name = input("What is your name o?")
+    board = [[' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']]
+    turn = 'x'
+    while not tic_tac_toe_checker(board, x_name, y_name): 
+        print_board(board)
+        if turn == 'x': 
+            greeting = x_name 
+        else: 
+            greeting = y_name
+        user_y = input(greeting + " which column would you like? ")
+        user_x = input(greeting + " which row would you like? ")
+        if user_x == "quit" or user_y == "quit": 
+            return
+        could_move = make_move(board, turn, int(user_x), int(user_y))
+        if could_move: 
+            if turn == 'x': 
+                turn = 'o'
+            else: 
+                turn = 'x'
+            
+game_loop()

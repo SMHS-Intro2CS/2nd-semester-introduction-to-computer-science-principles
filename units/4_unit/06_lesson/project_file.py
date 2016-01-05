@@ -28,8 +28,8 @@ def tic_tac_toe_checker(board):
             print("No one won :(")
 
 b1 = [['x', 'o', 'x'], ['x', 'o', 'o'], ['x', 'x', 'o']]
-b2 = [['o', 'o', 'x'], ['o', 'x', 'o'], ['x', 'x', 'o']]
-b3 = [['o', 'o', 'x'], ['o', 'x', 'o'], ['x', 'x', 'x']]
+b2 = [['o', 'o', 'x'], ['o', 'o', 'o'], ['x', 'x', 'o']]
+b3 = [['o', 'o', 'x'], ['o', 'x', 'o'], ['x', '0', 'x']]
 b4 = [['o', 'x', 'x'], ['x', 'o', 'o'], ['x', 'o', 'x']]
 
 tic_tac_toe_checker(b1)

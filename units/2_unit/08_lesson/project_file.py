@@ -62,7 +62,7 @@ while is_alive and not won:
             user_pocket.remove("sword")
             user_floor[user_horizontal] = "nothing"
         elif obstacle == "monster":
-            print ("You have been defeated :( ")
+            print("You have been defeated :( ")
             is_alive = False
         else:
             print("You can't fight that!")

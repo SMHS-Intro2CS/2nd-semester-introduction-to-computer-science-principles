@@ -20,19 +20,19 @@ Write down what data type you would expect to get back from the terminal (string
 3)  `x`
 <br>
 <br>
-4)  `‘ab’` 
+4)  `'ab'` 
 <br>
 <br>
-5)   `‘ab + b’`
+5)   `'ab + b'`
 <br>
 <br>
-6)  `‘ab’ + ‘b’`
+6)  `'ab' + 'b'`
 <br>
 <br>
-7)  `‘1’ * ‘b’`
+7)  `'1' * 'b'`
 <br>
 <br>
-8)  `‘a’ * 2`
+8)  `'a' * 2`
 <br>
 <br>
 What will be printed out after the code below is run? <br><br>
